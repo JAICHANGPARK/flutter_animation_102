@@ -38,10 +38,14 @@ class _MyHomePageState extends State<MyHomePage>
         AnimationController(vsync: this, duration: Duration(seconds: 2));
     _animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
         parent: _animationController, curve: Curves.fastOutSlowIn));
+    _animationController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -50,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage>
         animation: _animationController,
         builder: (context, child) =>
             Transform(
-              transform: Matrix4.translationValues(_animation.value, .0, 0.0),
+              transform: Matrix4.translationValues(_animation.value * width, 0.0, 0.0),
               child: Center(
                 child: Center(
                   child: Container(
