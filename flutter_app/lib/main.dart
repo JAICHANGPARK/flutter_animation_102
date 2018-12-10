@@ -29,21 +29,33 @@ class _MyHomePageState extends State<MyHomePage>
   AnimationController _animationController;
   Animation _animation;
 
+  void mylistener(status) {
+    if (status == AnimationStatus.completed) {
+
+      _animation.removeStatusListener(mylistener);
+
+      _animationController.reset();
+      _animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+          parent: _animationController, curve: Curves.fastOutSlowIn));
+      _animationController.forward();
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animationController = AnimationController(vsync: this, duration: Duration(seconds: 2));
     _animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
-        parent: _animationController, curve: Curves.fastOutSlowIn));
+        parent: _animationController, curve: Curves.fastOutSlowIn))
+      ..addStatusListener(mylistener);
+
     _animationController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
-
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -52,9 +64,9 @@ class _MyHomePageState extends State<MyHomePage>
       ),
       body: AnimatedBuilder(
         animation: _animationController,
-        builder: (context, child) =>
-            Transform(
-              transform: Matrix4.translationValues(_animation.value * width, 0.0, 0.0),
+        builder: (context, child) => Transform(
+              transform:
+                  Matrix4.translationValues(_animation.value * width, 0.0, 0.0),
               child: Center(
                 child: Center(
                   child: Container(
@@ -65,12 +77,14 @@ class _MyHomePageState extends State<MyHomePage>
                 ),
               ),
             ),
-
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _animationController.reset();
+          _animationController.forward();
+        },
         tooltip: 'Increment',
-        child: Icon(Icons.add),
+        child: Icon(Icons.refresh),
       ),
     );
   }
