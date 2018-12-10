@@ -31,9 +31,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   void mylistener(status) {
     if (status == AnimationStatus.completed) {
-
       _animation.removeStatusListener(mylistener);
-
       _animationController.reset();
       _animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
           parent: _animationController, curve: Curves.fastOutSlowIn));
@@ -50,7 +48,6 @@ class _MyHomePageState extends State<MyHomePage>
     _animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
         parent: _animationController, curve: Curves.fastOutSlowIn))
       ..addStatusListener(mylistener);
-
     _animationController.forward();
   }
 
@@ -65,8 +62,7 @@ class _MyHomePageState extends State<MyHomePage>
       body: AnimatedBuilder(
         animation: _animationController,
         builder: (context, child) => Transform(
-              transform:
-                  Matrix4.translationValues(_animation.value * width, 0.0, 0.0),
+              transform: Matrix4.translationValues(_animation.value * width, 0.0, 0.0),
               child: Center(
                 child: Center(
                   child: Container(
@@ -81,6 +77,8 @@ class _MyHomePageState extends State<MyHomePage>
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _animationController.reset();
+          _animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
+              parent: _animationController, curve: Curves.fastOutSlowIn))..addStatusListener(mylistener);
           _animationController.forward();
         },
         tooltip: 'Increment',
