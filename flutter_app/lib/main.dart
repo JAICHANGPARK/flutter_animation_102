@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Animation 102'),
     );
   }
 }
@@ -24,24 +24,50 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation _animation;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
+        parent: _animationController, curve: Curves.fastOutSlowIn));
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-
         title: Text(widget.title),
       ),
-      body: Center(
+      body: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) =>
+            Transform(
+              transform: Matrix4.translationValues(_animation.value, .0, 0.0),
+              child: Center(
+                child: Center(
+                  child: Container(
+                    height: 200.0,
+                    width: 200.0,
+                    color: Colors.green,
+                  ),
+                ),
+              ),
+            ),
 
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: () {},
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), 
+      ),
     );
   }
 }
